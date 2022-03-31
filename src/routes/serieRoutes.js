@@ -4,25 +4,23 @@ const service = new SeriesService();
 const express = require("express");
 const serieRoutes = express.Router();
 
-serieRoutes.get("/actors/:actor", async (req, res) => {
+serieRoutes.get("/actors/:actor", async (req, res, next) => {
   try {
     const { actor } = req.params;
     const data = await service.getSeriesActor(actor);
     res.status(200).json(data);
   } catch (error) {
-    res.status(404).json({
-      message: error.message,
-    });
+    next(error)
   }
 });
 
-serieRoutes.get("/premier/:premier_date", async (req, res) => {
+serieRoutes.get("/premier/:premier_date", async (req, res, next) => {
   try {
     const { premier_date } = req.params;
     const data = await service.SerieDate(premier_date);
     res.status(200).json(data);
   } catch (error) {
-    res.status(404).json({ message: error });
+    next(error)
   }
 });
 
@@ -49,17 +47,17 @@ serieRoutes.get("/", async (req, res) => {
   }
 });
 
-serieRoutes.get("/:serieId", async (req, res) => {
+serieRoutes.get("/:serieId", async (req, res, next) => {
   try {
     const { serieId } = req.params;
     const data = await service.showSerie(serieId);
     res.status(200).json({ data });
   } catch (error) {
-    res.status(404).json({ message: error });
+    next(error)
   }
 });
 
-serieRoutes.put("/:serieId", async (req, res) => {
+serieRoutes.put("/:serieId", async (req, res, next) => {
   try {
     const { serieId } = req.params;
     const { serie, number_seasons, original_lenguage, features_seasons } =
@@ -73,17 +71,17 @@ serieRoutes.put("/:serieId", async (req, res) => {
     );
     res.status(200).json({ data });
   } catch (error) {
-    res.status(204).json({ message: err });
+    next(error)
   }
 });
 
-serieRoutes.delete("/:serieId", async (req, res) => {
+serieRoutes.delete("/:serieId", async (req, res, next) => {
   try {
     const { serieId } = req.params;
     const data = await service.removeSerie(serieId);
     res.status(200).json({ data });
   } catch (error) {
-    res.status(204).json({ message: err });
+    next(error)
   }
 });
 
